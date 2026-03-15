@@ -1,0 +1,146 @@
+﻿<UserControl x:Class="QuickMCServer.ServerManagerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="White">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 【ヘッダー部分】 -->
+        <StackPanel Grid.Row="0" Margin="10">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="← サーバー一覧に戻る" Width="150" Height="30" Click="BackButton_Click"/>
+                <TextBlock x:Name="ServerNameText" Text="サーバー名" FontSize="24" FontWeight="Bold" Margin="20,0,0,0"/>
+
+                <TextBlock Text="参加用IP:" VerticalAlignment="Center" Margin="30,0,5,0" FontWeight="Bold"/>
+                <TextBox x:Name="IpAddressBox" Text="取得中..." IsReadOnly="True" VerticalContentAlignment="Center" Width="180" Height="25"/>
+                <Button Content="コピー" Margin="5,0,0,0" Padding="10,0" Click="CopyIpButton_Click" Background="#E0E0E0"/>
+            </StackPanel>
+            <TextBlock x:Name="ServerInfoText" Text="バージョン: " Margin="175,5,0,0" Foreground="Gray"/>
+        </StackPanel>
+
+        <!-- タブコントロール -->
+        <TabControl Grid.Row="1" Margin="10,0,10,10">
+
+            <!-- 1. コンソール タブ -->
+            <TabItem Header="コンソール" FontSize="16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBox x:Name="LogBox" Grid.Row="0" Margin="5" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" FontFamily="Consolas" TextWrapping="Wrap" Background="#1E1E1E" Foreground="White"/>
+                    <Grid Grid.Row="1" Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="CommandBox" Grid.Column="0" Height="30" FontSize="14" VerticalContentAlignment="Center" KeyDown="CommandBox_KeyDown"/>
+                        <Button Content="コマンド送信" Grid.Column="1" Width="120" Height="30" Margin="10,0,0,0" Click="SendCommandButton_Click"/>
+                    </Grid>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="5" HorizontalAlignment="Center">
+                        <Button x:Name="StartButton" Content="サーバーを起動" Width="150" Height="50" Margin="5" FontSize="16" Background="Green" Foreground="White" Click="StartButton_Click"/>
+                        <Button x:Name="StopButton" Content="シャットダウン" IsEnabled="False" Width="150" Height="50" Margin="5" FontSize="16" Background="OrangeRed" Foreground="White" Click="StopButton_Click"/>
+                        <Button x:Name="KillButton" Content="強制シャットダウン" Width="150" Height="50" Margin="5" FontSize="16" Background="DarkRed" Foreground="White" Click="KillButton_Click"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- 2. サーバー設定 タブ -->
+            <TabItem Header="サーバー設定" FontSize="16">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ScrollViewer Grid.Row="0" Margin="10">
+                        <StackPanel>
+                            <TextBlock Text="割り当てメモリ容量 (例: 2048M, 2G, 3000):" Margin="0,5,0,5" FontWeight="Bold"/>
+                            <TextBox x:Name="RamSettingBox" Height="25" FontSize="14" VerticalContentAlignment="Center"/>
+
+                            <TextBlock Text="最大人数 (max-players):" Margin="0,15,0,5" FontWeight="Bold"/>
+                            <TextBox x:Name="MaxPlayersSettingBox" Height="25" FontSize="14"/>
+
+                            <TextBlock Text="ゲームモード (gamemode):" Margin="0,15,0,5" FontWeight="Bold"/>
+                            <ComboBox x:Name="GameModeSettingBox" Height="25" FontSize="14">
+                                <ComboBoxItem Content="survival"/>
+                                <ComboBoxItem Content="creative"/>
+                                <ComboBoxItem Content="adventure"/>
+                                <ComboBoxItem Content="spectator"/>
+                            </ComboBox>
+
+                            <TextBlock Text="PVP (pvp):" Margin="0,15,0,5" FontWeight="Bold"/>
+                            <CheckBox x:Name="PvpSettingBox" Content="有効 (プレイヤー間の攻撃を許可する)" FontSize="14"/>
+
+                            <TextBlock Text="コマンドブロック (enable-command-block):" Margin="0,15,0,5" FontWeight="Bold"/>
+                            <CheckBox x:Name="CommandBlockSettingBox" Content="有効" FontSize="14"/>
+
+                            <TextBlock Text="--- ポート開放 (UPnP 自動設定) ---" Margin="0,30,0,5" FontWeight="Bold" Foreground="Blue"/>
+                            <TextBlock Text="※ご自宅のルーターがUPnP機能に対応している場合のみ動作します。" FontSize="12" Foreground="Gray" Margin="0,0,0,5"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                <TextBlock Text="ポート番号:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBox x:Name="PortNumberBox" Text="25565" Width="60" Height="25" VerticalContentAlignment="Center" FontSize="14"/>
+                                <Button Content="ポートを開放する" Margin="15,0,0,0" Padding="15,5" Background="#2196F3" Foreground="White" FontWeight="Bold" Click="OpenPortButton_Click"/>
+                                <Button Content="ポートを閉じる" Margin="10,0,0,0" Padding="15,5" Background="#ECEFF1" Click="ClosePortButton_Click"/>
+                            </StackPanel>
+                            <TextBlock x:Name="NatStatusText" Text="状態: 未操作" Margin="0,10,0,0" FontWeight="Bold"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <Button Grid.Row="1" Content="設定とメモリを保存" FontSize="20" FontWeight="Bold" Margin="20" Padding="10" Background="#4CAF50" Foreground="White" Click="SaveSettingsButton_Click"/>
+                </Grid>
+            </TabItem>
+
+            <!-- 3. プレイヤー権限 (OP) タブ -->
+            <TabItem Header="プレイヤー権限 (OP)" FontSize="16">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="350"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                        <TextBlock Text="現在のOPプレイヤー" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
+                        <ListBox x:Name="OpListBox" Height="300" FontSize="16"/>
+                        <Button Content="選択したプレイヤーの権限を剥奪 (削除)" Margin="0,10,0,0" Padding="10" Background="OrangeRed" Foreground="White" FontWeight="Bold" Click="RemoveOpButton_Click"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Background="#F5F5F5">
+                        <TextBlock Text="OP権限の追加" FontWeight="Bold" FontSize="16" Margin="10,10,10,20"/>
+                        <TextBlock Text="プレイヤーのMinecraft ID (名前):" Margin="10,0,10,5"/>
+                        <TextBox x:Name="NewOpNameBox" Height="30" FontSize="14" Margin="10,0,10,15"/>
+                        <Button x:Name="AddOpButton" Content="権限を付与して追加" Margin="10,0,10,10" Padding="10" Background="#4CAF50" Foreground="White" FontWeight="Bold" Click="AddOpButton_Click"/>
+                        <TextBlock Text="※サーバー起動中は即座に反映されます。停止中はインターネット経由でUUIDを取得し自動追記します。" TextWrapping="Wrap" Margin="10" FontSize="12" Foreground="Gray"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <!-- ★★★ 4. プラグイン管理 タブを追加 ★★★ -->
+            <TabItem Header="プラグイン管理" FontSize="16">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="300"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Margin="0,0,20,0">
+                        <TextBlock Text="導入済みのプラグイン (.jar)" FontWeight="Bold" FontSize="16" Margin="0,0,0,10"/>
+                        <ListBox x:Name="PluginsListBox" Height="300" FontSize="16"/>
+                        <Button Content="選択したプラグインを削除" Margin="0,10,0,0" Padding="10" Background="OrangeRed" Foreground="White" FontWeight="Bold" Click="RemovePluginButton_Click"/>
+                    </StackPanel>
+
+                    <!-- ドラッグ＆ドロップを受け付けるエリア -->
+                    <!-- AllowDrop="True" にすることで、ファイルの受け入れを許可します -->
+                    <Border Grid.Column="1" Background="#F0F8FF" BorderBrush="#2196F3" BorderThickness="2" CornerRadius="10" 
+                            AllowDrop="True" Drop="PluginsDropArea_Drop" DragEnter="PluginsDropArea_DragEnter" DragOver="PluginsDropArea_DragOver">
+                        <TextBlock Text="ここにプラグインの&#x0a;ファイル (.jar) を&#x0a;ドラッグ＆ドロップ&#x0a;して追加" 
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" FontSize="16" FontWeight="Bold" Foreground="#2196F3"/>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</UserControl>

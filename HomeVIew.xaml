@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="QuickMCServer.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#F0F4F8">
+
+    <Grid>
+        <!-- 縦に要素を並べるための箱です -->
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+
+            <TextBlock Text="Minecraft Server Manager" FontSize="36" FontWeight="Bold" Margin="0,0,0,50" />
+
+            <!-- 新規作成ボタン -->
+            <Button Content="サーバーを新規作成" FontSize="20" Padding="20" Margin="0,0,0,20" 
+                    Click="CreateButton_Click"/>
+
+            <!-- 既存サーバー管理ボタン -->
+            <Button Content="既存サーバーの管理" FontSize="20" Padding="20" 
+                    Click="ManageButton_Click"/>
+
+        </StackPanel>
+    </Grid>
+</UserControl>
