@@ -30,3 +30,13 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 開発について (Development)
 このソフトウェアのコードの大部分は、生成AIの支援を受けて作成されました。
 Most of the code for this software was generated with the assistance of AI.
+
+## 注意事項　(Important Notices)
+* ルーターが2台重なっている環境では、本ソフトで自動開放できるのは直近のルーターのみです。その場合は親ルーター側で手動設定が必要です。
+  In a double router setup, this app can only open the port on the closest router. You will need to manually configure the primary router.
+* ルーター側のUPnP機能が「無効」に設定されている場合、自動開放は動作しません。
+  This feature will not work if UPnP is disabled in your router's settings.
+* プロバイダやマンションの回線仕様により、ポート開放自体が制限されている場合があります。
+  Port forwarding may be restricted depending on your ISP or shared network environment.
+* WindowsファイアウォールでJavaおよび本ソフトの通信を許可してください。
+  Ensure Java and this app are allowed through your Windows Firewall.
